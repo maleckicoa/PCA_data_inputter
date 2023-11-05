@@ -3,18 +3,18 @@ import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
-url = "https://raw.githubusercontent.com/JWarmenhoven/ISLR-python/master/Notebooks/Data/USArrests.csv"
+#url = "https://raw.githubusercontent.com/JWarmenhoven/ISLR-python/master/Notebooks/Data/USArrests.csv"
 
-USArrests = pd.read_csv(url)
-USArrests = USArrests.set_index('Unnamed: 0')
+#USArrests = pd.read_csv(url)
+#USArrests = USArrests.set_index('Unnamed: 0')
 
-X = USArrests.values
-n_omit = 20
-np.random.seed(15)
-ridx = np.random.choice(np.arange(X.shape[0]), n_omit, replace=False)
-cidx = np.random.choice(np.arange(X.shape[1]), n_omit, replace=True)
-Xna = X.copy()
-Xna[ridx, cidx] = np.nan
+#X = USArrests.values
+#n_omit = 20
+#np.random.seed(15)
+#ridx = np.random.choice(np.arange(X.shape[0]), n_omit, replace=False)
+#cidx = np.random.choice(np.arange(X.shape[1]), n_omit, replace=True)
+#Xna = X.copy()
+#Xna[ridx, cidx] = np.nan
 
 
 class PcaInputter:
