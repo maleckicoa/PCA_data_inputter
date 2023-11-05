@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='pca_inputter',
-    version='0.1.0',
+    version='0.1.1',
     author='Aleksa Mihajlovic',
     author_email='mihajlovic.aleksa@gmail.com',
     packages=find_packages(),
