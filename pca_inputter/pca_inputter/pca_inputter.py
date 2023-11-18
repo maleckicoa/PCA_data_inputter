@@ -22,7 +22,6 @@ class PcaInputter:
 
             else:
                 self.r_idx, self.c_idx = np.where(data.isnull())
-                # self.raw_data = data.values
 
         if isinstance(data, np.ndarray):
             if not np.isreal(data).all():
@@ -36,31 +35,21 @@ class PcaInputter:
 
             else:
                 self.r_idx, self.c_idx = np.where(np.isnan(data))
-                # self.raw_data = data
 
-        #scaler = StandardScaler(with_std=True, with_mean=True)
-        #self.na_data = scaler.fit_transform(data)
         self.na_data = data
 
-    def run_pca(self, X, M=1):
+    def run_pca(self, X, M):
         pca_obj = PCA().fit(X)
         self.scores = pca_obj.transform(X)
         self.components = pca_obj.components_
 
-        return self.scores[:, 1 - M].reshape(50, M) @ self.components[:M][0].reshape(M, 4)
-        # return L.dot(components[:M,:])
+        return self.scores[:, 1 - M].reshape(X.shape[0], M) @ self.components[:M][0].reshape(M, X.shape[1])
 
-    def low_rank(self, X, M=1):
-        U, D, V = np.linalg.svd(X)
-        L = U[:, :M] * D[None, :M]
-        return L.dot(V[:M])
-
-    def iterfill(self):
+    def iterfill(self, M=1, thresh=1e-7):
         hat_data = self.na_data.copy()
         bar_data = np.nanmean(hat_data, axis=0)
         hat_data[self.r_idx, self.c_idx] = bar_data[self.c_idx]
 
-        thresh = 1e-7
         rel_err = 1
         count = 0
         ismiss = np.isnan(self.na_data)
@@ -70,13 +59,10 @@ class PcaInputter:
 
         while rel_err > thresh:
             count += 1
-            app_data = self.low_rank(hat_data, M=1)
+            app_data = self.run_pca(hat_data, M)
             hat_data[ismiss] = app_data[ismiss]
             mss = np.mean(((self.na_data - app_data)[~ismiss]) ** 2)
             rel_err = (mssold - mss) / mss0
             mssold = mss
-            # print(mssold,mss,mss0)
             print("Iteration: {0}, MSS:{1:.3f}, Rel.Err {2:.2e}".format(count, mss, rel_err))
         return hat_data
-
-
