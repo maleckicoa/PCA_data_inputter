@@ -1,0 +1,7 @@
+PYPI commands
+
+python setup.py sdist bdist_wheel    OR      python -m build
+
+twine upload dist/*   OR   twine upload dist/pca_inputter-0.1.3*
+
+pip install --no-cache-dir pca_inputter   #make sure to install from PYPI and not from cache
